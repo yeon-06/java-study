@@ -5,9 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
 
@@ -16,9 +14,8 @@ public class StreamStudy {
     public static long countWords() throws IOException {
         String contents = Files.readString(Paths
                 .get("src/main/resources/fp/war-and-peace.txt"));
-        List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
 
-        return words.stream()
+        return Arrays.stream(contents.split("[\\P{L}]+"))
                 .filter(word -> word.length() > 12)
                 .count();
     }
@@ -47,9 +44,11 @@ public class StreamStudy {
     public static void printLongestWordTop100() throws IOException {
         String contents = Files.readString(Paths
                 .get("src/main/resources/fp/war-and-peace.txt"));
-        Set<String> words = new HashSet<>(Arrays.asList(contents.split("[\\P{L}]+")));
 
-        words.stream()
+        Arrays.stream(contents.split("[\\P{L}]+"))
+                .filter(it -> it.length() > 12)
+                .map(String::toLowerCase)
+                .distinct()
                 .sorted(Comparator.comparingInt(String::length).reversed())
                 .limit(100)
                 .forEach(System.out::println);
